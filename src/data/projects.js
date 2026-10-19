@@ -26,7 +26,7 @@ export const projects = [
     stack: ['React', 'TypeScript', 'Tailwind', 'NestJS', 'Prisma', 'PostgreSQL', 'WebSocket', 'Docker', 'Kubernetes', 'Jenkins'],
     categories: ['ia', 'devops'],
     github: '',
-    demo: 'https://deepskyn.vercel.app/',
+    demo: 'https://deep-skyn-front-end-by-dev-masters.vercel.app/',
     images: [
       '/images/projects/deepskyn-1-hero.jpg',
       '/images/projects/deepskyn-2-profil-peau.jpg',
@@ -63,6 +63,7 @@ export const projects = [
     github: 'https://github.com/sahlihamza/SofiaGen',
     demo: '',
     images: [
+      '/images/projects/sofiagen-1-login.jpg',
       '/images/projects/sofiagen-2-dashboard.jpg',
       '/images/projects/sofiagen-11-products.jpg',
       '/images/projects/sofiagen-6-orders.jpg',
@@ -70,7 +71,7 @@ export const projects = [
       '/images/projects/sofiagen-9-email-notification.jpg',
       '/images/projects/sofiagen-12-themes.jpg',
     ],
-    image: '/images/projects/sofiagen-2-dashboard.jpg',
+    image: '/images/projects/sofiagen-1-login.jpg',
     accent: 'from-emerald-500/30 via-teal-500/25 to-cyan-500/30',
   },
   {
