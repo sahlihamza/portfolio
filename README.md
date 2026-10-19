@@ -287,3 +287,4 @@ demandé `prefers-reduced-motion: reduce`.
 - Visionneuse testée : ouverture au clic, navigation `←`/`→`, saut par vignette, fermeture `Échap`
   avec restauration du défilement de la page.
 - Rendus contrôlés en 1440×900 (thème sombre et clair) et 390×844 (mobile, menu hamburger).
+# Portfolio
