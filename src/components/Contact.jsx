@@ -4,6 +4,8 @@ import { Check, Loader2, Mail, MapPin, Phone, Send } from 'lucide-react'
 import { profile } from '../data/profile'
 import Reveal from './Reveal'
 import SectionTitle from './SectionTitle'
+import { useLanguage } from '../i18n/LanguageContext'
+import { profileByLanguage } from '../i18n/localizedContent'
 
 /** Endpoint Formspree (optionnel) : renseigné via la variable d'environnement VITE_FORMSPREE_ENDPOINT. */
 const FORMSPREE_ENDPOINT = import.meta.env.VITE_FORMSPREE_ENDPOINT || ''
@@ -12,6 +14,8 @@ const EMPTY_FORM = { name: '', email: '', message: '' }
 
 /** Section « Contact » : formulaire validé + liens directs. */
 export default function Contact() {
+  const { language, t } = useLanguage()
+  const localizedProfile = { ...profile, ...profileByLanguage[language] }
   const [form, setForm] = useState(EMPTY_FORM)
   const [errors, setErrors] = useState({})
   const [status, setStatus] = useState('idle') // idle | sending | sent | error
@@ -19,12 +23,12 @@ export default function Contact() {
 
   const validate = () => {
     const nextErrors = {}
-    if (form.name.trim().length < 2) nextErrors.name = 'Merci d’indiquer votre nom.'
+    if (form.name.trim().length < 2) nextErrors.name = t('contact.nameError')
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(form.email.trim())) {
-      nextErrors.email = 'Adresse e-mail invalide.'
+      nextErrors.email = t('contact.emailError')
     }
     if (form.message.trim().length < 10) {
-      nextErrors.message = 'Votre message doit contenir au moins 10 caractères.'
+      nextErrors.message = t('contact.messageError')
     }
     setErrors(nextErrors)
     return Object.keys(nextErrors).length === 0
@@ -45,7 +49,7 @@ export default function Contact() {
 
     // Sans endpoint configuré, on ouvre le client e-mail avec un message pré-rempli.
     if (!FORMSPREE_ENDPOINT) {
-      const subject = `Contact portfolio — ${form.name}`
+      const subject = `${t('contact.subject')} — ${form.name}`
       const body = `${form.message}\n\n— ${form.name} (${form.email})`
       window.location.href = `mailto:${profile.email}?subject=${encodeURIComponent(
         subject,
@@ -67,7 +71,7 @@ export default function Contact() {
     } catch (error) {
       setStatus('error')
       setErrorMessage(
-        'L’envoi a échoué. Vous pouvez me écrire directement à ' + profile.email + '.',
+        t('contact.sendError') + profile.email + '.',
       )
     }
   }
@@ -88,9 +92,9 @@ export default function Contact() {
 
       <div className="section relative">
         <SectionTitle
-          eyebrow="Contact"
-          title="Parlons de votre projet"
-          subtitle="Ouvert aux stages de fin d’études, aux collaborations et aux projets qui mêlent développement, IA et DevOps."
+          eyebrow={t('contact.eyebrow')}
+          title={t('contact.title')}
+          subtitle={t('contact.subtitle')}
         />
 
         <div className="mt-14 grid gap-8 lg:grid-cols-[0.8fr_1.2fr]">
@@ -119,7 +123,7 @@ export default function Contact() {
                 </span>
                 <span>
                   <span className="block text-xs uppercase tracking-[0.16em] text-slate-500">
-                    Téléphone
+                    {t('contact.phone')}
                   </span>
                   <span className="mt-0.5 block text-sm font-semibold text-slate-800 transition-colors group-hover:text-cyan-600 dark:text-slate-100 dark:group-hover:text-cyan-300">
                     {profile.phone}
@@ -133,16 +137,16 @@ export default function Contact() {
                 </span>
                 <span>
                   <span className="block text-xs uppercase tracking-[0.16em] text-slate-500">
-                    Localisation
+                    {t('contact.location')}
                   </span>
                   <span className="mt-0.5 block text-sm font-semibold text-slate-800 dark:text-slate-100">
-                    {profile.location}
+                    {localizedProfile.location}
                   </span>
                 </span>
               </div>
 
               <p className="mt-auto rounded-xl border border-cyan-400/20 bg-cyan-400/10 p-4 text-sm leading-relaxed text-cyan-700 dark:text-cyan-200">
-                {profile.availability}
+                {localizedProfile.availability}
               </p>
             </div>
           </Reveal>
@@ -152,7 +156,7 @@ export default function Contact() {
               <div className="grid gap-5 sm:grid-cols-2">
                 <div>
                   <label htmlFor="name" className="mb-2 block text-sm font-medium">
-                    Nom
+                    {t('contact.name')}
                   </label>
                   <input
                     id="name"
@@ -161,7 +165,7 @@ export default function Contact() {
                     autoComplete="name"
                     value={form.name}
                     onChange={handleChange}
-                    placeholder="Votre nom"
+                    placeholder={t('contact.namePlaceholder')}
                     aria-invalid={Boolean(errors.name)}
                     aria-describedby={errors.name ? 'name-error' : undefined}
                     className={fieldClass('name')}
@@ -184,7 +188,7 @@ export default function Contact() {
                     autoComplete="email"
                     value={form.email}
                     onChange={handleChange}
-                    placeholder="vous@exemple.com"
+                    placeholder={t('contact.emailPlaceholder')}
                     aria-invalid={Boolean(errors.email)}
                     aria-describedby={errors.email ? 'email-error' : undefined}
                     className={fieldClass('email')}
@@ -199,7 +203,7 @@ export default function Contact() {
 
               <div className="mt-5">
                 <label htmlFor="message" className="mb-2 block text-sm font-medium">
-                  Message
+                  {t('contact.message')}
                 </label>
                 <textarea
                   id="message"
@@ -207,7 +211,7 @@ export default function Contact() {
                   rows={5}
                   value={form.message}
                   onChange={handleChange}
-                  placeholder="Décrivez votre besoin, votre contexte, vos attentes…"
+                  placeholder={t('contact.messagePlaceholder')}
                   aria-invalid={Boolean(errors.message)}
                   aria-describedby={errors.message ? 'message-error' : undefined}
                   className={`${fieldClass('message')} resize-y`}
@@ -224,12 +228,12 @@ export default function Contact() {
                   {status === 'sending' ? (
                     <>
                       <Loader2 size={16} className="animate-spin" />
-                      Envoi…
+                      {t('contact.sending')}
                     </>
                   ) : (
                     <>
                       <Send size={16} />
-                      Envoyer le message
+                      {t('contact.send')}
                     </>
                   )}
                 </button>
@@ -243,7 +247,7 @@ export default function Contact() {
                       className="flex items-center gap-2 text-sm font-medium text-emerald-500"
                     >
                       <Check size={16} />
-                      Message envoyé, merci !
+                      {t('contact.sent')}
                     </motion.p>
                   )}
                   {status === 'error' && (

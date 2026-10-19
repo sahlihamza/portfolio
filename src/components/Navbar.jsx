@@ -1,14 +1,23 @@
 import { useEffect, useMemo, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
-import { Menu, X } from 'lucide-react'
-import { navLinks, profile } from '../data/profile'
+import { Languages, Menu, X } from 'lucide-react'
+import { profile } from '../data/profile'
 import { useActiveSection } from '../hooks/useActiveSection'
+import { useLanguage } from '../i18n/LanguageContext'
 import ThemeToggle from './ThemeToggle'
 
 /** Barre de navigation fixe : effet au scroll, menu mobile, bascule de thème. */
 export default function Navbar({ theme, onToggleTheme }) {
   const [scrolled, setScrolled] = useState(false)
   const [open, setOpen] = useState(false)
+  const { language, toggleLanguage, t } = useLanguage()
+  const navLinks = [
+    { id: 'apropos', label: t('nav.about') },
+    { id: 'competences', label: t('nav.skills') },
+    { id: 'projets', label: t('nav.projects') },
+    { id: 'parcours', label: t('nav.journey') },
+    { id: 'contact', label: t('nav.contact') },
+  ]
   const sectionIds = useMemo(() => navLinks.map((link) => link.id), [])
   const activeSection = useActiveSection(sectionIds)
 
@@ -35,8 +44,8 @@ export default function Navbar({ theme, onToggleTheme }) {
           : 'border-b border-transparent bg-transparent'
       }`}
     >
-      <nav className="section flex h-16 items-center justify-between gap-4" aria-label="Navigation principale">
-        <a href="#accueil" className="flex items-center gap-2.5" aria-label="Retour à l'accueil">
+      <nav className="section flex h-16 items-center justify-between gap-4" aria-label={t('nav.main')}>
+        <a href="#accueil" className="flex items-center gap-2.5" aria-label={t('nav.home')}>
           <span className="grid h-9 w-9 place-items-center rounded-xl bg-accent-gradient font-display text-sm font-bold text-[#030712]">
             HS
           </span>
@@ -74,11 +83,21 @@ export default function Navbar({ theme, onToggleTheme }) {
         </ul>
 
         <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={toggleLanguage}
+            aria-label={`${t('language.label')}: ${language === 'fr' ? 'English' : 'Français'}`}
+            title={`${t('language.label')}: ${language === 'fr' ? 'English' : 'Français'}`}
+            className="inline-flex h-10 items-center gap-1.5 rounded-xl border border-slate-200 bg-white/70 px-2.5 text-xs font-semibold text-slate-700 transition-colors hover:border-cyan-400 hover:text-cyan-600 dark:border-white/10 dark:bg-white/5 dark:text-slate-200 dark:hover:text-cyan-300"
+          >
+            <Languages size={15} />
+            <span>{language.toUpperCase()}</span>
+          </button>
           <ThemeToggle theme={theme} onToggle={onToggleTheme} />
           <button
             type="button"
             onClick={() => setOpen((value) => !value)}
-            aria-label={open ? 'Fermer le menu' : 'Ouvrir le menu'}
+            aria-label={open ? t('nav.menuClose') : t('nav.menuOpen')}
             aria-expanded={open}
             className="grid h-10 w-10 place-items-center rounded-xl border border-slate-200 bg-white/70 text-slate-700 lg:hidden dark:border-white/10 dark:bg-white/5 dark:text-slate-200"
           >

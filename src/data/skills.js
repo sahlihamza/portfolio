@@ -15,7 +15,7 @@ export const skillCategories = [
     title: 'Backend',
     icon: 'server',
     description: 'APIs REST, architecture MVC et services métier',
-    skills: ['PHP', 'Laravel', 'Symfony', 'Java', 'Spring Boot', 'NestJS', 'Node.js', 'Express.js', 'API REST'],
+    skills: ['PHP', 'Laravel', 'Symfony', 'Django', 'FastAPI', 'Java', 'Spring Boot', 'NestJS', 'Node.js', 'Express.js', 'API REST'],
   },
   {
     id: 'data',

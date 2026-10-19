@@ -3,6 +3,8 @@ import { Brain, Container, Database, KeyRound, LayoutTemplate, Server } from 'lu
 import { marqueeTech, skillCategories } from '../data/skills'
 import Reveal from './Reveal'
 import SectionTitle from './SectionTitle'
+import { useLanguage } from '../i18n/LanguageContext'
+import { skillsByLanguage } from '../i18n/localizedContent'
 
 const ICONS = {
   layout: LayoutTemplate,
@@ -15,6 +17,7 @@ const ICONS = {
 
 /** Section « Compétences » : catégories avec badges animés + bandeau défilant. */
 export default function Skills() {
+  const { language, t } = useLanguage()
   return (
     <section id="competences" className="relative py-20 sm:py-28">
       <div
@@ -24,14 +27,15 @@ export default function Skills() {
 
       <div className="section relative">
         <SectionTitle
-          eyebrow="Compétences"
-          title="La pile technique que je maîtrise"
-          subtitle="Des interfaces riches en données jusqu’au déploiement conteneurisé, avec l’IA comme levier de valeur."
+          eyebrow={t('skills.eyebrow')}
+          title={t('skills.title')}
+          subtitle={t('skills.subtitle')}
         />
 
         <div className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {skillCategories.map((category, index) => {
+        {skillCategories.map((category, index) => {
             const Icon = ICONS[category.icon] ?? Server
+          const [title, description] = skillsByLanguage[language][category.id] ?? [category.title, category.description]
             return (
               <Reveal key={category.id} delay={(index % 3) * 0.08}>
                 <article className="glass card-hover group h-full rounded-2xl p-6">
@@ -40,9 +44,9 @@ export default function Skills() {
                       <Icon size={20} />
                     </span>
                     <div>
-                      <h3 className="text-lg font-semibold">{category.title}</h3>
+                      <h3 className="text-lg font-semibold">{title}</h3>
                       <p className="mt-0.5 text-xs text-slate-500 dark:text-slate-400">
-                        {category.description}
+                        {description}
                       </p>
                     </div>
                   </div>
@@ -52,7 +56,7 @@ export default function Skills() {
                     whileInView="show"
                     viewport={{ once: true, amount: 0.3 }}
                     variants={{ show: { transition: { staggerChildren: 0.035 } } }}
-                    className="mt-5 flex flex-wrap gap-2"
+                    className="mt-5 flex w-full flex-wrap content-start justify-start gap-2"
                   >
                     {category.skills.map((skill) => (
                       <motion.li

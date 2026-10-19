@@ -1,9 +1,12 @@
+import { useLanguage } from '../i18n/LanguageContext'
+
 /**
  * Illustration générée pour les projets sans capture d'écran disponible.
  * Remplace proprement l'image manquante sans casser la mise en page,
  * et reste lisible dans les deux thèmes (base sombre + accent coloré).
  */
 export default function ProjectArtwork({ title, accent = 'from-cyan-500/30 via-blue-500/25 to-indigo-500/30' }) {
+  const { t } = useLanguage()
   return (
     <div className="relative flex h-full w-full flex-col items-center justify-center overflow-hidden bg-slate-950">
       <div className={`absolute inset-0 bg-gradient-to-br ${accent}`} aria-hidden="true" />
@@ -25,7 +28,7 @@ export default function ProjectArtwork({ title, accent = 'from-cyan-500/30 via-b
         {title}
       </span>
       <span className="relative mt-3 rounded-full border border-white/20 bg-white/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-white/80">
-        Projet
+        {t('projects.project')}
       </span>
     </div>
   )

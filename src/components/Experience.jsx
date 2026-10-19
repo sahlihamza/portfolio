@@ -2,28 +2,36 @@ import { Briefcase, GraduationCap, MapPin } from 'lucide-react'
 import { education, experiences } from '../data/experience'
 import Reveal from './Reveal'
 import SectionTitle from './SectionTitle'
+import { useLanguage } from '../i18n/LanguageContext'
+import { educationByLanguage, experiencesByLanguage } from '../i18n/localizedContent'
 
 /** Section « Parcours » : formation et expériences, timeline verticale animée. */
 export default function Experience() {
+  const { language, t } = useLanguage()
+  const localizedEducation = language === 'en'
+    ? education.map((item, index) => ({ ...item, period: educationByLanguage.en[index][0], title: educationByLanguage.en[index][1], detail: educationByLanguage.en[index][2], place: educationByLanguage.en[index][3] }))
+    : education
+  const localizedExperiences = experiences.map((item, index) => ({ ...item, ...(experiencesByLanguage[language]?.[index] ?? {}) }))
+
   return (
     <section id="parcours" className="relative py-20 sm:py-28">
       <div className="section">
         <SectionTitle
-          eyebrow="Parcours"
-          title="Formation et expériences professionnelles"
-          subtitle="Un chemin construit entre l’école, l laboratoire et l’entreprise — chaque étape a produit du code en production."
+          eyebrow={t('journey.eyebrow')}
+          title={t('journey.title')}
+          subtitle={t('journey.subtitle')}
         />
 
-        <div className="mt-14 grid gap-12 lg:grid-cols-2">
+        <div className="mt-14 space-y-14">
           {/* Formation */}
           <div>
             <h3 className="flex items-center gap-2 text-lg font-semibold">
               <GraduationCap size={20} className="text-cyan-500" />
-              Formation
+              {t('journey.education')}
             </h3>
 
             <ol className="mt-6 space-y-6 border-l border-slate-200 pl-8 dark:border-white/10">
-              {education.map((item, index) => (
+              {localizedEducation.map((item, index) => (
                 <Reveal as="li" key={item.title} delay={index * 0.08} className="relative">
                   <span className="timeline-dot" aria-hidden="true" />
                   <p className="text-xs font-semibold uppercase tracking-[0.16em] text-cyan-600 dark:text-cyan-300">
@@ -44,14 +52,13 @@ export default function Experience() {
           <div>
             <h3 className="flex items-center gap-2 text-lg font-semibold">
               <Briefcase size={20} className="text-cyan-500" />
-              Expériences
+              {t('journey.experience')}
             </h3>
 
-            <ol className="mt-6 space-y-6 border-l border-slate-200 pl-8 dark:border-white/10">
-              {experiences.map((item, index) => (
-                <Reveal as="li" key={`${item.company}-${item.period}`} delay={index * 0.08} className="relative">
-                  <span className="timeline-dot" aria-hidden="true" />
-                  <div className="glass card-hover rounded-2xl p-5">
+            <ol className="mt-6 grid grid-cols-1 items-stretch gap-5 md:grid-cols-2">
+              {localizedExperiences.map((item, index) => (
+                <Reveal as="li" key={`${item.company}-${item.period}`} delay={index * 0.08} className="h-full">
+                  <div className="glass card-hover h-full rounded-2xl p-5">
                     <p className="text-xs font-semibold uppercase tracking-[0.16em] text-cyan-600 dark:text-cyan-300">
                       {item.period}
                     </p>

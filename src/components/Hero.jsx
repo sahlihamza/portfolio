@@ -5,6 +5,8 @@ import { profile } from '../data/profile'
 import { useTypewriter } from '../hooks/useTypewriter'
 import Particles from './Particles'
 import SocialLinks from './SocialLinks'
+import { useLanguage } from '../i18n/LanguageContext'
+import { profileByLanguage } from '../i18n/localizedContent'
 
 const FLOATING_CHIPS = [
   { label: 'React', className: 'left-[-6%] top-[12%]', delay: '0s' },
@@ -15,7 +17,9 @@ const FLOATING_CHIPS = [
 
 /** Section d'accueil : nom, titre animé, accroche, appels à l'action et photo. */
 export default function Hero() {
-  const { text } = useTypewriter(profile.roles)
+  const { language, t } = useLanguage()
+  const localizedProfile = { ...profile, ...profileByLanguage[language] }
+  const { text } = useTypewriter(localizedProfile.roles)
   const sectionRef = useRef(null)
 
   // Parallaxe légère au défilement
@@ -71,7 +75,7 @@ export default function Hero() {
             className="eyebrow"
           >
             <Sparkles size={13} />
-            {profile.availability}
+            {localizedProfile.availability}
           </motion.span>
 
           <motion.h1
@@ -80,7 +84,7 @@ export default function Hero() {
             transition={{ duration: 0.65, delay: 0.08 }}
             className="mt-6 text-4xl font-bold leading-[1.08] sm:text-5xl lg:text-6xl"
           >
-            <span className="block text-slate-500 dark:text-slate-400">Bonjour, je suis</span>
+            <span className="block text-slate-500 dark:text-slate-400">{t('hero.greeting')}</span>
             <span className="gradient-text mt-1 block animate-gradient-pan bg-[length:200%_auto]">
               {profile.name}
             </span>
@@ -97,7 +101,7 @@ export default function Hero() {
               aria-hidden="true"
               className="inline-block h-6 w-[3px] animate-blink rounded-full bg-cyan-400"
             />
-            <span className="sr-only">{profile.roles.join(', ')}</span>
+            <span className="sr-only">{localizedProfile.roles.join(', ')}</span>
           </motion.p>
 
           <motion.p
@@ -106,7 +110,7 @@ export default function Hero() {
             transition={{ duration: 0.65, delay: 0.24 }}
             className="mt-5 max-w-xl text-base leading-relaxed text-slate-600 dark:text-slate-400"
           >
-            {profile.pitch}
+            {localizedProfile.pitch}
           </motion.p>
 
           <motion.div
@@ -121,7 +125,7 @@ export default function Hero() {
               whileTap={{ scale: 0.97 }}
               className="btn-primary"
             >
-              Voir mes projets
+              {t('hero.projects')}
               <ArrowRight size={16} />
             </motion.a>
             <motion.a
@@ -132,7 +136,7 @@ export default function Hero() {
               className="btn-ghost"
             >
               <ArrowDownToLine size={16} />
-              Télécharger mon CV
+              {t('hero.cv')}
             </motion.a>
             <motion.a
               href={`mailto:${profile.email}`}
@@ -141,7 +145,7 @@ export default function Hero() {
               className="btn-ghost"
             >
               <Mail size={16} />
-              Me contacter
+              {t('hero.contact')}
             </motion.a>
           </motion.div>
 
@@ -152,7 +156,7 @@ export default function Hero() {
             className="mt-8 flex flex-wrap items-center gap-5"
           >
             <SocialLinks />
-            <span className="text-xs text-slate-500 dark:text-slate-500">{profile.location}</span>
+            <span className="text-xs text-slate-500 dark:text-slate-500">{localizedProfile.location}</span>
           </motion.div>
         </div>
 
@@ -178,7 +182,7 @@ export default function Hero() {
           >
             <img
               src={profile.photo}
-              alt="Portrait de Sahli Hamza, développeur Full Stack"
+              alt={t('hero.portraitAlt')}
               width="900"
               height="900"
               className="aspect-square w-full rounded-[1.6rem] object-cover"
@@ -202,14 +206,14 @@ export default function Hero() {
 
       <motion.a
         href="#apropos"
-        aria-label="Aller à la section À propos"
+        aria-label={t('hero.scrollAbout')}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1, duration: 0.6 }}
         className="absolute bottom-6 left-1/2 hidden -translate-x-1/2 text-slate-400 transition-colors hover:text-cyan-500 lg:block"
       >
         <span className="flex flex-col items-center gap-1 text-[11px] uppercase tracking-[0.2em]">
-          Scroll
+          {t('hero.scroll')}
           <motion.span
             animate={{ scaleY: [1, 0.4, 1], originY: 0 }}
             transition={{ duration: 1.8, repeat: Infinity, ease: 'easeInOut' }}

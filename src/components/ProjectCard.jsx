@@ -3,9 +3,11 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { ArrowUpRight, Github, Images, Maximize2 } from 'lucide-react'
 import ProjectArtwork from './ProjectArtwork'
 import ProjectLightbox from './ProjectLightbox'
+import { useLanguage } from '../i18n/LanguageContext'
 
 /** Carte projet : galerie de captures, description, technologies et liens. */
 export default function ProjectCard({ project, index = 0 }) {
+  const { t } = useLanguage()
   const { title, summary, stack, github, demo, image, images = [], accent, period, highlights = [] } = project
 
   // Une seule image reste gérée : `image` sert de repli si `images` est vide.
@@ -56,19 +58,19 @@ export default function ProjectCard({ project, index = 0 }) {
           }
           role={gallery.length > 1 ? 'button' : undefined}
           tabIndex={gallery.length > 1 ? 0 : undefined}
-          aria-label={gallery.length > 1 ? `Ouvrir la galerie du projet ${title}` : undefined}
+          aria-label={gallery.length > 1 ? t('projects.openGallery', { title }) : undefined}
         >
           <AnimatePresence mode="wait" initial={false}>
             <motion.img
               key={current ?? 'artwork'}
               src={current}
-              alt={current ? `Aperçu du projet ${title}` : ''}
+              alt={current ? t('projects.preview', { title }) : ''}
               loading="lazy"
               initial={{ opacity: 0, scale: 1.05 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.35, ease: 'easeOut' }}
-              className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.07]"
+              className={`absolute inset-0 h-full w-full transition-transform duration-700 ease-out group-hover:scale-[1.07] ${project.id === 'hirehub' ? 'object-contain p-2' : 'object-cover'}`}
             />
           </AnimatePresence>
 
@@ -95,7 +97,7 @@ export default function ProjectCard({ project, index = 0 }) {
               <span className="absolute inset-0 flex items-center justify-center bg-slate-950/50 opacity-0 backdrop-blur-[2px] transition-opacity duration-300 group-hover:opacity-100">
                 <span className="flex items-center gap-2 rounded-xl border border-white/20 bg-slate-900/80 px-4 py-2.5 text-sm font-semibold text-white shadow-lg">
                   <Maximize2 size={16} />
-                  Voir les {gallery.length} captures
+                  {t('projects.viewCaptures', { count: gallery.length })}
                 </span>
               </span>
             </>
@@ -109,7 +111,7 @@ export default function ProjectCard({ project, index = 0 }) {
                 key={src}
                 type="button"
                 onClick={() => setActive(i)}
-                aria-label={`Voir la capture ${i + 1} de ${title}`}
+                aria-label={t('projects.showCapture', { number: i + 1, title })}
                 aria-current={i === active ? 'true' : undefined}
                 className={`h-11 w-16 shrink-0 overflow-hidden rounded-lg border transition-all duration-200 ${
                   i === active
@@ -126,7 +128,7 @@ export default function ProjectCard({ project, index = 0 }) {
               className="ml-auto inline-flex shrink-0 items-center gap-1.5 rounded-lg border border-slate-200 px-2.5 py-1.5 text-[11px] font-semibold text-slate-600 transition-colors hover:border-cyan-400 hover:text-cyan-600 dark:border-white/10 dark:text-slate-300 dark:hover:text-cyan-300"
             >
               <Images size={13} />
-              Galerie
+              {t('projects.gallery')}
             </button>
           </div>
         )}
@@ -177,7 +179,7 @@ export default function ProjectCard({ project, index = 0 }) {
                 rel="noreferrer noopener"
                 className="inline-flex items-center gap-1.5 text-sm font-semibold text-cyan-600 transition-colors hover:text-cyan-400 dark:text-cyan-300"
               >
-                Démo en ligne
+                {t('projects.demo')}
                 <ArrowUpRight size={16} />
               </a>
             )}

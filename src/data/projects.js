@@ -43,7 +43,7 @@ export const projects = [
     summary:
       'Application web de prévention de la canicule et des coupures de courant : alertes météo, gestion des coupures, signalements citoyens et chatbot d’assistance, augmentés d’un modèle hybride de prédiction du risque de coupure (Random Forest).',
     highlights: ['Module Coupures', 'Signalements citoyens', 'Chatbot', 'Random Forest'],
-    stack: ['Laravel', 'Blade', 'PHP', 'Random Forest', 'Docker', 'Git', 'GitHub Actions'],
+    stack: ['Laravel', 'Blade', 'PHP', 'FastAPI', 'Random Forest', 'Docker', 'Git', 'GitHub Actions'],
     categories: ['ia', 'web', 'devops'],
     github: 'https://github.com/sahlihamza/HeatAlert',
     demo: 'https://heatalert.onrender.com/',
@@ -95,17 +95,17 @@ export const projects = [
   },
   {
     id: 'hirehub',
-    title: 'Plateforme de recrutement par IA',
+    title: 'JobLupa — Plateforme de recrutement par IA',
     period: '2024',
     summary:
       'Plateforme de recrutement intelligente : présélection automatique des candidats, questionnaires dynamiques adaptés au profil et scoring automatisé des candidatures.',
     highlights: ['Présélection automatique', 'Questionnaires dynamiques', 'Scoring automatisé'],
     stack: ['Angular', 'Symfony', 'PHP', 'TypeScript', 'MySQL'],
     categories: ['ia', 'web'],
-    github: 'https://github.com/sahlihamza/HireHub',
+    github: 'https://github.com/naamenMohamed/pfe-1-F',
     demo: '',
-    images: [],
-    image: '',
+    images: ['/images/projects/joblupa-ai.png'],
+    image: '/images/projects/joblupa-ai.png',
     accent: 'from-emerald-500/30 via-teal-500/25 to-cyan-500/30',
   },
   {
@@ -119,8 +119,11 @@ export const projects = [
     categories: ['web'],
     github: 'https://github.com/sahlihamza/Eco-Confort-Market-Stage-perfectionnement',
     demo: '',
-    images: [],
-    image: '',
+    images: [
+      '/images/projects/eco%20confort%201.png',
+      '/images/projects/eco%20confort%202.png',
+    ],
+    image: '/images/projects/eco%20confort%201.png',
     accent: 'from-lime-500/30 via-green-500/25 to-cyan-500/30',
   },
 ]

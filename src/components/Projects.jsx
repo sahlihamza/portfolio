@@ -1,35 +1,45 @@
 import { useMemo, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
-import { projectFilters, projects } from '../data/projects'
+import { projects } from '../data/projects'
 import ProjectCard from './ProjectCard'
 import Reveal from './Reveal'
 import SectionTitle from './SectionTitle'
+import { useLanguage } from '../i18n/LanguageContext'
+import { projectsByLanguage } from '../i18n/localizedContent'
 
 /** Section « Projets » : filtres par catégorie + grille de cartes. */
 export default function Projects() {
   const [filter, setFilter] = useState('all')
+  const { language, t } = useLanguage()
+  const localizedProjects = projects.map((project) => ({ ...project, ...(projectsByLanguage[language]?.[project.id] ?? {}) }))
+  const filters = [
+    { id: 'all', label: t('projects.all') },
+    { id: 'web', label: t('projects.web') },
+    { id: 'ia', label: t('projects.ai') },
+    { id: 'devops', label: t('projects.devops') },
+  ]
 
   const visibleProjects = useMemo(
-    () => (filter === 'all' ? projects : projects.filter((project) => project.categories.includes(filter))),
-    [filter],
+    () => (filter === 'all' ? localizedProjects : localizedProjects.filter((project) => project.categories.includes(filter))),
+    [filter, language],
   )
 
   return (
     <section id="projets" className="relative py-20 sm:py-28">
       <div className="section">
         <SectionTitle
-          eyebrow="Projets"
-          title="Des applications complètes, de l’IA à la production"
-          subtitle="Projets académiques et projets livrés en entreprise : chaque carte mène vers le code source et, quand elle existe, vers une démo en ligne."
+          eyebrow={t('projects.eyebrow')}
+          title={t('projects.title')}
+          subtitle={t('projects.subtitle')}
         />
 
         <Reveal delay={0.05} className="mt-10">
           <div
             className="flex flex-wrap items-center justify-center gap-2"
             role="group"
-            aria-label="Filtrer les projets par catégorie"
+            aria-label={t('projects.filterLabel')}
           >
-            {projectFilters.map((item) => {
+            {filters.map((item) => {
               const isActive = filter === item.id
               return (
                 <button

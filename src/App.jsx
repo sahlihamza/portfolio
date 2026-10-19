@@ -8,9 +8,20 @@ import Experience from './components/Experience'
 import Contact from './components/Contact'
 import Footer from './components/Footer'
 import ScrollTools from './components/ScrollTools'
+import { LanguageProvider, useLanguage } from './i18n/LanguageContext'
 
 export default function App() {
   const { theme, toggleTheme } = useTheme()
+
+  return (
+    <LanguageProvider>
+      <AppContent theme={theme} onToggleTheme={toggleTheme} />
+    </LanguageProvider>
+  )
+}
+
+function AppContent({ theme, onToggleTheme }) {
+  const { t } = useLanguage()
 
   return (
     <div className="relative min-h-screen overflow-x-hidden">
@@ -18,11 +29,11 @@ export default function App() {
         href="#apropos"
         className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:rounded-lg focus:bg-accent-gradient focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-[#030712]"
       >
-        Aller au contenu principal
+        {t('a11y.skip')}
       </a>
 
       <ScrollTools />
-      <Navbar theme={theme} onToggleTheme={toggleTheme} />
+      <Navbar theme={theme} onToggleTheme={onToggleTheme} />
 
       <main>
         <Hero />

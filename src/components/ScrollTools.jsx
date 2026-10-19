@@ -1,9 +1,11 @@
 import { AnimatePresence, motion, useScroll, useSpring } from 'framer-motion'
 import { ArrowUp } from 'lucide-react'
 import { useEffect, useState } from 'react'
+import { useLanguage } from '../i18n/LanguageContext'
 
 /** Barre de progression du défilement + bouton de retour en haut. */
 export default function ScrollTools() {
+  const { t } = useLanguage()
   const { scrollYProgress } = useScroll()
   const scaleX = useSpring(scrollYProgress, { stiffness: 120, damping: 28, restDelta: 0.001 })
   const [visible, setVisible] = useState(false)
@@ -28,7 +30,7 @@ export default function ScrollTools() {
           <motion.button
             type="button"
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-            aria-label="Revenir en haut de la page"
+            aria-label={t('scroll.top')}
             initial={{ opacity: 0, scale: 0.6, y: 16 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.6, y: 16 }}
